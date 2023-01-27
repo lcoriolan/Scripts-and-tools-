@@ -1,10 +1,12 @@
 $ipAddresses = Get-Content "C:\path\to\ip-list.txt"
 $openPorts = @()
-$port = "22" # replace with the desired port number
+$ports = "22","80","443" # replace with the desired port numbers
 
 foreach ($ip in $ipAddresses) {
-    if (Test-NetConnection -ComputerName $ip -Port $port -InformationLevel Quiet) {
-        $openPorts += "$ip:$port"
+    foreach ($port in $ports) {
+        if (Test-NetConnection -ComputerName $ip -Port $port -InformationLevel Quiet) {
+            $openPorts += "$ip:$port"
+        }
     }
 }
 
