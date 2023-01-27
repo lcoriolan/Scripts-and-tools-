@@ -1,0 +1,11 @@
+$ipAddresses = Get-Content "C:\path\to\ip-list.txt"
+$openPorts = @()
+$port = "22" # replace with the desired port number
+
+foreach ($ip in $ipAddresses) {
+    if (Test-NetConnection -ComputerName $ip -Port $port -InformationLevel Quiet) {
+        $openPorts += "$ip:$port"
+    }
+}
+
+$openPorts | Out-File "C:\path\to\open-ports.txt"
