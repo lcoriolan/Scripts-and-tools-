@@ -1,0 +1,20 @@
+$ipAddresses = Get-Content "C:\path\to\ip-list.txt"
+$openPorts = @()
+$ports = "80","443"
+
+foreach ($ip in $ipAddresses) {
+    foreach ($port in $ports) {
+        if (Test-NetConnection -ComputerName $ip -Port $port -InformationLevel Quiet) {
+            $openPorts += "$ip:$port"
+            $url = "http://$ip"
+            $image = "$ip.png"
+            (New-Object -comObject InternetExplorer.Application).visible = $false
+            (New-Object -comObject InternetExplorer.Application).Navigate($url)
+            Start-Sleep -s 5
+            (New-Object -comObject InternetExplorer.Application).ExecWB(9,0)
+            (New-Object -comObject InternetExplorer.Application).ExecWB(6,2)
+            (New-Object -comObject InternetExplorer.Application).ExecWB(8,2,$image)
+            (New-Object -comObject InternetExplorer.Application).Quit()
+        }
+    }
+}
